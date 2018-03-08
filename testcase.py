@@ -39,7 +39,7 @@ class Guild(db.Model):
 
 class Item(db.Model):
     id = db.Column(db.String(32), primary_key=True)
-    name = db.Column(db.String(64), uniqe=True)
+    name = db.Column(db.String(64), unique=True)
     owners = db.relationship('Player', secondary=item_stat, back_populates='items')
 
 db.create_all()
