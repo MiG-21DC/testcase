@@ -71,7 +71,7 @@ def get_all_players():
     res = Player.query.all()
     if res is None:
         return 404
-    print(res)
+    print(str(res))
     return 0
 
 
