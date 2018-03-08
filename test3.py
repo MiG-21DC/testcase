@@ -68,7 +68,7 @@ def root():
 
 @app.route('/player', methods=['GET'])
 def get_all_players():
-    res = db.session.query('Player').all()
+    res = Player.query.all()
     if res is None:
         return 404
     print(res)
