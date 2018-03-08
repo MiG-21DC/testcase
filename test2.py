@@ -40,7 +40,7 @@ class Item(db.Model):
 db.create_all()
 
 manager = flask_restless.APIManager(app, flask_sqlalchemy_db=db)
-player_blueprint = manager.create_api(Player)
+player_blueprint = manager.create_api(Player, methods=['GET', 'POST', 'DELETE'])
 guild_blueprint = manager.create_api(Guild)
 
 
