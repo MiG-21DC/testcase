@@ -1,8 +1,8 @@
 from flask import Flask, request
 import flask_sqlalchemy
-from flask_restful import Resource, Api
+# from flask_restful import Resource, Api
 import json
-import requests
+# import requests
 import ast
 # import flask_restless
 
