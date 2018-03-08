@@ -16,6 +16,6 @@ r = requests.put('http://0.0.0.0:5000/player', data=json.dumps(player3), headers
 print(r.text)
 
 print('Test 2: Get 1 player info from player table')
-r = requests.post('http://0.0.0.0:5000/player/%s' % player1_uuid, headers=header)
+r = requests.get('http://0.0.0.0:5000/player/%s' % player1_uuid, headers=header)
 print(r.text)
 
