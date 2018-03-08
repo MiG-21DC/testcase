@@ -88,7 +88,8 @@ def add_player():
 
 @app.route('/player/<nickname>', methods=['DELETE'])
 def delete_player(nickname):
-    res = Player.query.filter_by(nickname=nickname).first().delete()
+    res = Player.query.filter_by(nickname=nickname).delete()
+    db.session.commit()
     if res is None:
         return 404
     print(res)
