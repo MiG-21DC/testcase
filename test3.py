@@ -190,6 +190,21 @@ def add_player_to_guild():
     return json.dumps({'success': 'true'})
 
 
+@app.route('/playerguild', methods=['DELETE'])
+def delete_player_to_guild():
+    data = request.get_data(as_text=True)
+    data = ast.literal_eval(data)
+    guild_id = data['guild_id']
+    player_id = data['player_id']
+    res = Guild.query.filter_by(id=guild_id).first()
+    if res is None:
+        return 404
+    player_res = Player.query.filter_by(id=player_id).first()
+    if player_res is None:
+        return 404
+    res.guild_player.pop(player_res)
+    db.session.commit()
+    return json.dumps({'success': 'true'})
 
 if __name__ == '__main__':
     app.run(debug=True, host='0.0.0.0')
