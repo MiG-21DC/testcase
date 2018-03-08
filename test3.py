@@ -75,7 +75,7 @@ def get_player(nickname):
     return json.dumps({'id': res.id, 'nickname': res.nickname, 'email': res.email})
 
 @app.route('/player', methods=['POST'])
-def add_player()
+def add_player():
     data = requests.get_json()
     print(data)
     return data
