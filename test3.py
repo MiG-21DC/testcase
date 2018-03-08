@@ -343,11 +343,17 @@ def delete_item_from_player():
 @app.route('/player_point/<player_id>', methods=['GET'])
 def player_point(player_id):
     res = Item.query.filter(Item.owners.any(id=player_id)).all()
+    player_res = Player.query.filter_by(id=player_id).first()
+    skill_point = int(player_res.skill_point)
     if res is None:
         return 404
     for item in res:
-        print(str(item).lstrip('<Item ').rstrip('>'))
-    return json.dumps({'success': 'true'})
+        item_id = str(item).lstrip('<Item ').rstrip('>')
+        res = Item.query.filter_by(id=item_id).first()
+        skill_point += int(res.skill_point)
+    return json.dumps({'success': 'true',
+                       'skill_point': skill_point})
+
 
 if __name__ == '__main__':
     app.run(debug=True, host='0.0.0.0')
