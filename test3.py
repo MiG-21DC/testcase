@@ -361,8 +361,7 @@ def player_point(player_id):
 def guild_point(guild_id):
     guild_res = Player.query.filter(Player.guilds.any(id=guild_id)).all()
     if guild_res is None:
-        return json.dumps(({'success': 'true',
-                       'skill_point': 0}))
+        return json.dumps(({'success': 'true', 'skill_point': 0}))
     skill_point = 0
     item_bucket = []
     for player in guild_res:
@@ -381,8 +380,7 @@ def guild_point(guild_id):
     for item_id in unique_item:
         res = Item.query.filter_by(id=item_id).first()
         skill_point += int(res.skill_point)
-    return json.dumps(({'success': 'true',
-                        'skill_point': skill_point}))
+    return json.dumps(({'success': 'true', 'skill_point': skill_point}))
 
 
 
