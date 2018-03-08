@@ -346,7 +346,7 @@ def player_point(player_id):
     if res is None:
         return 404
     for item in res:
-        print(item.text)
+        print(str(item))
     return json.dumps({'success': 'true'})
 
 if __name__ == '__main__':
