@@ -82,7 +82,7 @@ def add_player():
     data = ast.literal_eval(data)
     print(data)
     print(data['id'])
-    newplayer = Player(data['id'], data['nickname'], data['email'])
+    newplayer = Player(id=data['id'], nickname=data['nickname'], email=data['email'])
     db.session.add(newplayer)
     db.session.commit()
     return json.dumps({'success': 'true'})
