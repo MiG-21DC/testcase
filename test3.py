@@ -151,13 +151,13 @@ def add_guild():
             db.session.commit()
         else:
             try:
-                new_nickname = data['nickname']
-                res.nickname = new_nickname
+                name = data['name']
+                res.name = name
             except:
                 pass
             try:
-                new_email = data['email']
-                res.email = new_email
+                country_code = data['country_code']
+                res.country_code = country_code
             except:
                 pass
             db.session.commit()
@@ -191,7 +191,7 @@ def add_player_to_guild():
 
 
 @app.route('/playerguild', methods=['DELETE'])
-def delete_player_to_guild():
+def delete_player_from_guild():
     data = request.get_data(as_text=True)
     data = ast.literal_eval(data)
     guild_id = data['guild_id']
@@ -205,6 +205,7 @@ def delete_player_to_guild():
     res.guild_player.remove(player_res)
     db.session.commit()
     return json.dumps({'success': 'true'})
+
 
 if __name__ == '__main__':
     app.run(debug=True, host='0.0.0.0')
