@@ -202,7 +202,7 @@ def delete_player_to_guild():
     player_res = Player.query.filter_by(id=player_id).first()
     if player_res is None:
         return 404
-    res.guild_player.pop(player_res)
+    res.guild_player.remove(player_res)
     db.session.commit()
     return json.dumps({'success': 'true'})
 
