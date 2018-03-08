@@ -7,18 +7,18 @@ app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://shawn:shawn@localhost/game
 db = flask_sqlalchemy.SQLAlchemy(app)
 
 guild_stat = db.Table('guild_stat',
-                      db.Column('player_id', db.Integer, db.ForeignKey('player.id')),
-                      db.Column('guild_id', db.Integer, db.ForeignKey('guild.id'))
+                      db.Column('player_id', db.String(128), db.ForeignKey('player.id')),
+                      db.Column('guild_id', db.String(128), db.ForeignKey('guild.id'))
                       )
 
 item_stat = db.Table('item_stat',
-                     db.Column('player_id', db.Integer, db.ForeignKey('player.id')),
-                     db.Column('item_id', db.Integer, db.ForeignKey('item.id'))
+                     db.Column('player_id', db.String(128), db.ForeignKey('player.id')),
+                     db.Column('item_id', db.String(128), db.ForeignKey('item.id'))
                      )
 
 
 class Player(db.Model):
-    id = db.Column(db.Integer, primary_key=True)     #UUID
+    id = db.Column(db.String(128), primary_key=True)     #UUID
     nickname = db.Column(db.String(64), unique=True)
     email = db.Column(db.String(128), unique=True)
     guilds = db.relationship('Guild', secondary=guild_stat, back_populates='players')
@@ -26,22 +26,23 @@ class Player(db.Model):
 
 
 class Guild(db.Model):
-    id = db.Column(db.Integer, primary_key=True)        #UUID
+    id = db.Column(db.String(128), primary_key=True)        #UUID
     name = db.Column(db.String(64), unique=True)
     country_code = db.Column(db.String(16))
     players = db.relationship('Player', secondary=guild_stat, back_populates='guilds')
 
 
 class Item(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
+    id = db.Column(db.String(128), primary_key=True)
     name = db.Column(db.String(64), unique=True)
     owners = db.relationship('Player', secondary=item_stat, back_populates='items')
 
 db.create_all()
 
 manager = flask_restless.APIManager(app, flask_sqlalchemy_db=db)
-player_blueprint = manager.create_api(Player, methods=['GET', 'POST', 'DELETE'])
-guild_blueprint = manager.create_api(Guild)
+player_blueprint = manager.create_api(Player, methods=['GET', 'POST', 'PUT', 'DELETE'])
+guild_blueprint = manager.create_api(Guild, methods=['GET', 'POST', 'PUT', 'DELETE'])
+item_blueprint = manager.create_api(Item, methods=['GET', 'POST', 'PUT', 'DELETE'])
 
 
 @app.route('/')
