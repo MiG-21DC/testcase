@@ -66,9 +66,9 @@ def root():
     return 'Game Hive Player API'
 
 
-@app.route('/player', methods=['GET'])
-def get_all_players():
-    res = Player.query.all()
+@app.route('/player/<nickname>', methods=['GET'])
+def get_player(nickname):
+    res = Player.query.filter_by(nickname=nickname).first()
     if res is None:
         return 404
     print(str(res))
