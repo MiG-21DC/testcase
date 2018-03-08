@@ -88,12 +88,13 @@ def add_player():
 
 @app.route('/player/<nickname>', methods=['DELETE'])
 def delete_player(nickname):
-    res = Player.query.filter_by(nickname=nickname).first()
+    res = Player.query.filter_by(nickname=nickname).first().delete()
     if res is None:
         return 404
-    player = {'id': res.id, 'nickname': res.nickname, 'email': res.email}
-    db.session.delete(player)
-    db.session.commit()
+    print(res)
+    # player = {'id': res.id, 'nickname': res.nickname, 'email': res.email}
+    # db.session.delete(player)
+    # db.session.commit()
     return json.dumps({'success': 'true'})
 
 if __name__ == '__main__':
