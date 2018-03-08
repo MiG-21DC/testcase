@@ -65,8 +65,16 @@ r = requests.delete('http://0.0.0.0:5000/guild/%s' % guild1_uuid, headers=header
 print(r.text)
 input("Press Enter to continue...")
 
-print('Test 9: Add a player to the guild')
-player_guild = {'player_id': player3_uuid, 'guild_id': guild2_uuid}
-r = requests.post('http://0.0.0.0:5000/playerguild', data=json.dumps(player_guild), headers=header)
+print('Test 9: Add two players to the guild')
+player3_guild = {'player_id': player3_uuid, 'guild_id': guild2_uuid}
+player2_guild = {'player_id': player2_uuid, 'guild_id': guild2_uuid}
+r = requests.post('http://0.0.0.0:5000/playerguild', data=json.dumps(player3_guild), headers=header)
+print(r.text)
+r = requests.post('http://0.0.0.0:5000/playerguild', data=json.dumps(player2_guild), headers=header)
+input("Press Enter to continue...")
+
+print('Test 10: Delete 1 players from the guild')
+player3_guild = {'player_id': player3_uuid, 'guild_id': guild2_uuid}
+r = requests.delete('http://0.0.0.0:5000/playerguild', data=json.dumps(player3_guild), headers=header)
 print(r.text)
 input("Press Enter to continue...")
