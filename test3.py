@@ -383,7 +383,7 @@ def guild_point(guild_id):
         skill_point += int(res.skill_point)
     return json.dumps(({'success': 'true',
                         'skill_point': skill_point}))
-        
+
 
 
 
