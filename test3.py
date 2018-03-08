@@ -11,12 +11,12 @@ app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://shawn:shawn@localhost/game
 db = flask_sqlalchemy.SQLAlchemy(app)
 
 
-guild_stat = db.Table('guild_stat',
+guild_player = db.Table('guild_stat',
                       db.Column('player_id', db.String(128), db.ForeignKey('player.id')),
                       db.Column('guild_id', db.String(128), db.ForeignKey('guild.id'))
                       )
 
-item_stat = db.Table('item_stat',
+item_player = db.Table('item_stat',
                      db.Column('player_id', db.String(128), db.ForeignKey('player.id')),
                      db.Column('item_id', db.String(128), db.ForeignKey('item.id'))
                      )
@@ -26,21 +26,23 @@ class Player(db.Model):
     id = db.Column(db.String(128), primary_key=True)     #UUID
     nickname = db.Column(db.String(64), unique=True)
     email = db.Column(db.String(128), unique=True)
-    guilds = db.relationship('Guild', secondary=guild_stat, back_populates='players')
-    items = db.relationship('Item', secondary=item_stat, back_populates='owners')
+    guilds = db.relationship('Guild', secondary=guild_player,
+                             backref=db.backref('guild_player', lazy='dynamic'))
+    # items = db.relationship('Item', secondary=item_player, back_populates='owners')
 
 
 class Guild(db.Model):
     id = db.Column(db.String(128), primary_key=True)        #UUID
     name = db.Column(db.String(64), unique=True)
     country_code = db.Column(db.String(16))
-    players = db.relationship('Player', secondary=guild_stat, back_populates='guilds')
+    # players = db.relationship('Player', secondary=guild_stat, back_populates='guilds')
 
 
 class Item(db.Model):
     id = db.Column(db.String(128), primary_key=True)
     name = db.Column(db.String(64), unique=True)
-    owners = db.relationship('Player', secondary=item_stat, back_populates='items')
+    owners = db.relationship('Player', secondary=item_player,
+                             backref=db.backref('owner', lazy='dynamic'))
 
 db.create_all()
 
@@ -68,35 +70,126 @@ def root():
     return 'Game Hive Player API'
 
 
-@app.route('/player/<nickname>', methods=['GET'])
-def get_player(nickname):
-    res = Player.query.filter_by(nickname=nickname).first()
+# Get one user info
+@app.route('/player/<player_id>', methods=['GET'])
+def get_player(player_id):
+    res = Player.query.filter_by(id=player_id).first()
     if res is None:
         return 404
     return json.dumps({'id': res.id, 'nickname': res.nickname, 'email': res.email})
 
 
-@app.route('/player', methods=['POST'])
+# Add or update a player info with POST or PUT
+@app.route('/player', methods=['POST', 'PUT'])
 def add_player():
     data = request.get_data(as_text=True)
     data = ast.literal_eval(data)
-    newplayer = Player(id=data['id'], nickname=data['nickname'], email=data['email'])
-    db.session.add(newplayer)
-    db.session.commit()
-    return json.dumps({'success': 'true'})
+    player_id = data['id']
+    if request.method == 'POST':
+        newplayer = Player(id=data['id'], nickname=data['nickname'], email=data['email'])
+        db.session.add(newplayer)
+        db.session.commit()
+        return json.dumps({'success': 'true'})
+    else:
+        res = Player.query.filter_by(id=player_id).first()
+        if res is None:
+            newplayer = Player(id=data['id'], nickname=data['nickname'], email=data['email'])
+            db.session.add(newplayer)
+            db.session.commit()
+        else:
+            try:
+                new_nickname = data['nickname']
+                res.nickname = new_nickname
+            except:
+                pass
+            try:
+                new_email = data['email']
+                res.email = new_email
+            except:
+                pass
+            db.session.commit()
+        return json.dumps({'success': 'true'})
 
 
-@app.route('/player/<nickname>', methods=['DELETE'])
-def delete_player(nickname):
-    res = Player.query.filter_by(nickname=nickname).delete()
+# Delete a user
+@app.route('/player/<player_id>', methods=['DELETE'])
+def delete_player(player_id):
+    res = Player.query.filter_by(id=player_id).delete()
     db.session.commit()
     if res is None:
         return 404
-    print(res)
-    # player = {'id': res.id, 'nickname': res.nickname, 'email': res.email}
-    # db.session.delete(player)
-    # db.session.commit()
     return json.dumps({'success': 'true'})
+
+
+@app.route('/guild/<guild_id>', methods=['GET'])
+def get_guild(guild_id):
+    res = Guild.query.filter_by(id=guild_id).first()
+    if res is None:
+        return 404
+    return json.dumps({'id': res.id, 'name': res.name, 'country_code': res.country_code})
+
+
+@app.route('/guild', methods=['POST', 'PUT'])
+def add_guild():
+    data = request.get_data(as_text=True)
+    data = ast.literal_eval(data)
+    guild_id = data['id']
+    try:
+        country_code = data['country_code']
+    except:
+        country_code = None
+    if request.method == 'POST':
+        newguild = Guild(id=data['id'], name=data['name'], country_code=country_code)
+        db.session.add(newguild)
+        db.session.commit()
+        return json.dumps({'success': 'true'})
+    else:
+        res = Guild.query.filter_by(id=guild_id).first()
+        if res is None:
+            newguild = Guild(id=data['id'], name=data['name'], country_code=country_code)
+            db.session.add(newguild)
+            db.session.commit()
+        else:
+            try:
+                new_nickname = data['nickname']
+                res.nickname = new_nickname
+            except:
+                pass
+            try:
+                new_email = data['email']
+                res.email = new_email
+            except:
+                pass
+            db.session.commit()
+        return json.dumps({'success': 'true'})
+
+
+@app.route('/guild/<guild_id>', methods=['DELETE'])
+def delete_player(guild_id):
+    res = Player.query.filter_by(id=guild_id).delete()
+    db.session.commit()
+    if res is None:
+        return 404
+    return json.dumps({'success': 'true'})
+
+
+@app.route('/playerguild', methods=['POST'])
+def add_player_to_guild():
+    data = request.get_data(as_text=True)
+    data = ast.literal_eval(data)
+    guild_id = data['guild_id']
+    player_id = data['player_id']
+    res = Guild.query.filter_by(id=guild_id).first()
+    if res is None:
+        return 404
+    player_res = Player.query.filter_by(id=player_id).first()
+    if player_res is None:
+        return 404
+    res.guild_player.append(player_res)
+    db.session.commit()
+    return json.dumps({'success': 'true'})
+
+
 
 if __name__ == '__main__':
     app.run(debug=True, host='0.0.0.0')
