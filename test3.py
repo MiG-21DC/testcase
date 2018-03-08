@@ -78,7 +78,7 @@ def get_player(nickname):
 
 @app.route('/player', methods=['POST'])
 def add_player():
-    data = request.raw_data()
+    data = request.get_data(as_text=True)
     data = ast.literal_eval(data)
     print(data)
     print(data['id'])
