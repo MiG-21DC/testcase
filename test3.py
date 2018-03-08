@@ -239,6 +239,16 @@ def delete_player_from_guild():
     return json.dumps({'success': 'true'})
 
 
+# Get one item info.
+# Request method: GET /item/<item_id>
+@app.route('/item/<item_id>', methods=['GET'])
+def get_item(item_id):
+    res = Item.query.filter_by(id=item_id).first()
+    if res is None:
+        return 404
+    return json.dumps({'id': res.id, 'name': res.name, 'skill_point': res.skill_point})
+
+
 # Add or update an item info
 # Request method: POST /item or PUT /item
 # Content style: {'id': <UUID> , 'name': <name>, 'skill_point': <skill_point>}
@@ -329,10 +339,14 @@ def delete_item_from_player():
     return json.dumps({'success': 'true'})
 
 
-# # Get total points of a player
-# @app.route('/player_point/<player_id>', methods=['GET'])
-# def player_point(player_id):
-
+# Get total points of a player
+@app.route('/player_point/<player_id>', methods=['GET'])
+def player_point(player_id):
+    res = Item.query.filter(Item.owner.any(id=player_id)).all()
+    if res is None:
+        return 404
+    print(res.text)
+    return 0
 
 if __name__ == '__main__':
     app.run(debug=True, host='0.0.0.0')
