@@ -345,7 +345,7 @@ def player_point(player_id):
     res = Item.query.filter(Item.owners.any(id=player_id)).all()
     if res is None:
         return 404
-    print(res.text)
+    print(res)
     return 0
 
 if __name__ == '__main__':
