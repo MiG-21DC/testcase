@@ -165,7 +165,7 @@ def add_guild():
 
 
 @app.route('/guild/<guild_id>', methods=['DELETE'])
-def delete_player(guild_id):
+def delete_guild(guild_id):
     res = Player.query.filter_by(id=guild_id).delete()
     db.session.commit()
     if res is None:
