@@ -1,5 +1,6 @@
 from flask import Flask
 import flask_sqlalchemy
+import flask_restless
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://shawn:shawn@localhost/gamehive'
@@ -37,3 +38,15 @@ class Item(db.Model):
     owners = db.relationship('Player', secondary=item_stat, back_populates='items')
 
 db.create_all()
+
+manager = flask_restless.APIManager(app, flask_sqlalchemy_db=db)
+player_blueprint = manager.create_api(Player)
+guild_blueprint = manager.create_api(Guild)
+
+
+@app.route('/')
+def root():
+    return 'Game Hive Player API'
+
+if __name__ == '__main__':
+    app.run(debug=True, host='0.0.0.0')
