@@ -2,7 +2,7 @@ from flask import Flask
 import flask_sqlalchemy
 
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://shawn:shawn@postgres:5432/gamehive'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://shawn:shawn@localhost/gamehive'
 db = flask_sqlalchemy.SQLAlchemy(app)
 
 guild_stat = db.Table('guild_stat',
@@ -12,7 +12,7 @@ guild_stat = db.Table('guild_stat',
 
 item_stat = db.Table('item_stat',
                      db.Column('player_id', db.String(32), db.ForeignKey('player.id')),
-                     db.Column('item_id', db.String(32), db.ForeignKey('Item.id'))
+                     db.Column('item_id', db.String(32), db.ForeignKey('item.id'))
                      )
 
 
