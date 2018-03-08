@@ -65,7 +65,8 @@ db.create_all()
 def root():
     return 'Game Hive Player API'
 
-@app.route('/player', methods='GET'[])
+
+@app.route('/player', methods=['GET'])
 def get_all_players():
     res = db.session.query('Player').all()
     if res is None:
