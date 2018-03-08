@@ -3,6 +3,7 @@ import flask_sqlalchemy
 from flask_restful import Resource, Api
 import json
 import requests
+import ast
 # import flask_restless
 
 app = Flask(__name__)
@@ -78,6 +79,7 @@ def get_player(nickname):
 @app.route('/player', methods=['POST'])
 def add_player():
     data = request.get_data()
+    data = ast.literal_eval(data)
     print(data)
     print(data['id'])
     newplayer = Player(data['id'], data['nickname'], data['email'])
