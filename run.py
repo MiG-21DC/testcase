@@ -101,3 +101,8 @@ r = requests.post('http://0.0.0.0:5000/itemplayer', data=json.dumps(item2_player
 print(r.text)
 r = requests.post('http://0.0.0.0:5000/itemplayer', data=json.dumps(item1_player), headers=header)
 input("Press Enter to continue...")
+
+print('Test 13: Get total point of a player')
+r = requests.get('http://0.0.0.0:5000/player_point/%s' % player2_uuid, headers=header)
+print(r.text)
+input("Press Enter to continue...")

@@ -340,6 +340,8 @@ def delete_item_from_player():
 
 
 # Get total points of a player
+# A skill point include point from player itself and items he owned
+# Request method: GET /player_point/<player_id>
 @app.route('/player_point/<player_id>', methods=['GET'])
 def player_point(player_id):
     res = Item.query.filter(Item.owners.any(id=player_id)).all()
@@ -357,6 +359,8 @@ def player_point(player_id):
 
 
 # Get total points of a guild
+# Every items among all guild member is only calculated once in the guild skill point
+# Request method: GET /guild_point/<guild_id>
 @app.route('/guild_point/<guild_id>', methods=['GET'])
 def guild_point(guild_id):
     guild_res = Player.query.filter(Player.guilds.any(id=guild_id)).all()
@@ -381,8 +385,6 @@ def guild_point(guild_id):
         res = Item.query.filter_by(id=item_id).first()
         skill_point += int(res.skill_point)
     return json.dumps(({'success': 'true', 'skill_point': skill_point}))
-
-
 
 
 if __name__ == '__main__':
