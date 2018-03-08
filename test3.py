@@ -342,7 +342,7 @@ def delete_item_from_player():
 # Get total points of a player
 @app.route('/player_point/<player_id>', methods=['GET'])
 def player_point(player_id):
-    res = Item.query.filter(Item.owner.any(id=player_id)).all()
+    res = Item.query.filter(Item.owners.any(id=player_id)).all()
     if res is None:
         return 404
     print(res.text)
