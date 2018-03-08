@@ -74,11 +74,14 @@ def get_player(nickname):
         return 404
     return json.dumps({'id': res.id, 'nickname': res.nickname, 'email': res.email})
 
+
 @app.route('/player', methods=['POST'])
 def add_player():
     data = request.get_data()
-    print(data)
-    return data
+    newplayer = Player(data['id'], data['nickname'], data['email'])
+    db.session.add(newplayer)
+    db.session.commit()
+    return json.dumps({'success': 'true'})
 
 
 if __name__ == '__main__':
