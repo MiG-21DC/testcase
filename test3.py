@@ -346,7 +346,7 @@ def player_point(player_id):
     if res is None:
         return 404
     print(res)
-    return 0
+    return json.dumps({'success': 'true'})
 
 if __name__ == '__main__':
     app.run(debug=True, host='0.0.0.0')
