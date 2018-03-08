@@ -45,7 +45,7 @@ db.create_all()
 
 class WorkOnPlayer(Resource):
     def get(self, nickname):
-        res = Player.query.filter_by(username=nickname).first()
+        res = Player.query.filter_by(nickname=nickname).first()
         if res is None:
             return 404
         return json.dumps({'id': res.id, 'nickname': res.nickname, 'email': res.email})
