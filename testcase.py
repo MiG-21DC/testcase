@@ -4,7 +4,7 @@ import flask_restless
 
 
 class Config(object):
-    SQLALCHEMY_DATABASE_URI = 'postgresql://shawn:shawn@postgres:5432/shawn'
+    SQLALCHEMY_DATABASE_URI = 'postgresql://shawn:shawn@postgres:5432/gamehive'
 
 app = Flask(__name__)
 app.config.from_object(Config)
