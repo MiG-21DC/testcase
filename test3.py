@@ -2,6 +2,7 @@ from flask import Flask
 import flask_sqlalchemy
 from flask_restful import Resource, Api
 import json
+import requests
 # import flask_restless
 
 app = Flask(__name__)
@@ -72,6 +73,12 @@ def get_player(nickname):
     if res is None:
         return 404
     return json.dumps({'id': res.id, 'nickname': res.nickname, 'email': res.email})
+
+@app.route('/player', methods=['POST'])
+def add_player()
+    data = requests.get_json()
+    print(data)
+    return data
 
 
 if __name__ == '__main__':
