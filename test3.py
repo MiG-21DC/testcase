@@ -71,7 +71,7 @@ def get_player(nickname):
     res = Player.query.filter_by(nickname=nickname).first()
     if res is None:
         return 404
-    print(str(res))
+    print(res.email)
     return 0
 
 
