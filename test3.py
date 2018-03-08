@@ -329,5 +329,10 @@ def delete_item_from_player():
     return json.dumps({'success': 'true'})
 
 
+# # Get total points of a player
+# @app.route('/player_point/<player_id>', methods=['GET'])
+# def player_point(player_id):
+
+
 if __name__ == '__main__':
     app.run(debug=True, host='0.0.0.0')
