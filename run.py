@@ -99,5 +99,5 @@ item2_player = {'player_id': player2_uuid, 'item_id': item2_uuid}
 item1_player = {'player_id': player2_uuid, 'item_id': item1_uuid}
 r = requests.post('http://0.0.0.0:5000/itemplayer', data=json.dumps(item2_player), headers=header)
 print(r.text)
-r = requests.post('http://0.0.0.0:5000/playerguild', data=json.dumps(item1_player), headers=header)
+r = requests.post('http://0.0.0.0:5000/itemplayer', data=json.dumps(item1_player), headers=header)
 input("Press Enter to continue...")
