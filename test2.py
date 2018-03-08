@@ -18,7 +18,7 @@ item_stat = db.Table('item_stat',
 
 
 class Player(db.Model):
-    id = db.Column(db.String(32), primary_key=True)     #UUID
+    id = db.Column(db.Integer, primary_key=True)     #UUID
     nickname = db.Column(db.String(64), unique=True)
     email = db.Column(db.String(128), unique=True)
     guilds = db.relationship('Guild', secondary=guild_stat, back_populates='players')
@@ -26,14 +26,14 @@ class Player(db.Model):
 
 
 class Guild(db.Model):
-    id = db.Column(db.String(32), primary_key=True)        #UUID
+    id = db.Column(db.Integer, primary_key=True)        #UUID
     name = db.Column(db.String(64), unique=True)
     country_code = db.Column(db.String(16))
     players = db.relationship('Player', secondary=guild_stat, back_populates='guilds')
 
 
 class Item(db.Model):
-    id = db.Column(db.String(32), primary_key=True)
+    id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(64), unique=True)
     owners = db.relationship('Player', secondary=item_stat, back_populates='items')
 
