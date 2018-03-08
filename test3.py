@@ -78,6 +78,7 @@ def get_player(nickname):
 @app.route('/player', methods=['POST'])
 def add_player():
     data = request.get_data()
+    data = json.dumps(data)
     newplayer = Player(data['id'], data['nickname'], data['email'])
     db.session.add(newplayer)
     db.session.commit()
