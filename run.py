@@ -78,3 +78,26 @@ player3_guild = {'player_id': player3_uuid, 'guild_id': guild2_uuid}
 r = requests.delete('http://0.0.0.0:5000/playerguild', data=json.dumps(player3_guild), headers=header)
 print(r.text)
 input("Press Enter to continue...")
+
+print('Test 11: Add 3 items in item table')
+item1_uuid = str(uuid.uuid1())
+item2_uuid = str(uuid.uuid1())
+item3_uuid = str(uuid.uuid1())
+item1 = {'id': item1_uuid, 'name': 'Sword', 'skill_point': '30'}
+item2 = {'id': item2_uuid, 'name': 'Shield', 'skill_point': '20'}
+item3 = {'id': item3_uuid, 'name': 'Axes'}
+r = requests.post('http://0.0.0.0:5000/item', data=json.dumps(item1), headers=header)
+print(r.text)
+r = requests.put('http://0.0.0.0:5000/item', data=json.dumps(item2), headers=header)
+print(r.text)
+r = requests.put('http://0.0.0.0:5000/item', data=json.dumps(item3), headers=header)
+print(r.text)
+input("Press Enter to continue...")
+
+print('Test 12: Add two items to the player')
+item2_player = {'player_id': player2_uuid, 'item_id': item2_uuid}
+item1_player = {'player_id': player2_uuid, 'item_id': item1_uuid}
+r = requests.post('http://0.0.0.0:5000/itemplayer', data=json.dumps(item2_player), headers=header)
+print(r.text)
+r = requests.post('http://0.0.0.0:5000/playerguild', data=json.dumps(item1_player), headers=header)
+input("Press Enter to continue...")
