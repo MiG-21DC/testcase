@@ -260,7 +260,7 @@ def add_item():
     else:
         res = Item.query.filter_by(id=item_id).first()
         if res is None:
-            newitem = Guild(id=data['id'], name=data['name'], skill_point=skill_point)
+            newitem = Item(id=data['id'], name=data['name'], skill_point=skill_point)
             db.session.add(newitem)
             db.session.commit()
         else:
