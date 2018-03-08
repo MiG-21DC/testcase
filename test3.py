@@ -45,6 +45,7 @@ db.create_all()
 
 class WorkOnPlayer(Resource):
     def get(self, nickname):
+        print('here2')
         res = Player.query.filter_by(nickname=nickname).first()
         print('here')
         print(res)
