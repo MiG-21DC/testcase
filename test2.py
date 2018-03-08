@@ -7,13 +7,13 @@ app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://shawn:shawn@localhost/game
 db = flask_sqlalchemy.SQLAlchemy(app)
 
 guild_stat = db.Table('guild_stat',
-                      db.Column('player_id', db.String(32), db.ForeignKey('player.id')),
-                      db.Column('guild_id', db.String(32), db.ForeignKey('guild.id'))
+                      db.Column('player_id', db.Integer, db.ForeignKey('player.id')),
+                      db.Column('guild_id', db.Integer, db.ForeignKey('guild.id'))
                       )
 
 item_stat = db.Table('item_stat',
-                     db.Column('player_id', db.String(32), db.ForeignKey('player.id')),
-                     db.Column('item_id', db.String(32), db.ForeignKey('item.id'))
+                     db.Column('player_id', db.Integer, db.ForeignKey('player.id')),
+                     db.Column('item_id', db.Integer, db.ForeignKey('item.id'))
                      )
 
 
