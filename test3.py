@@ -346,13 +346,45 @@ def player_point(player_id):
     player_res = Player.query.filter_by(id=player_id).first()
     skill_point = int(player_res.skill_point)
     if res is None:
-        return 404
+        return json.dumps(({'success': 'true',
+                       'skill_point': skill_point}))
     for item in res:
         item_id = str(item).lstrip('<Item ').rstrip('>')
         res = Item.query.filter_by(id=item_id).first()
         skill_point += int(res.skill_point)
     return json.dumps({'success': 'true',
                        'skill_point': skill_point})
+
+
+# Get total points of a guild
+@app.route('/guild_point/<guild_id>', methods=['GET'])
+def guild_point(guild_id):
+    guild_res = Player.query.filter(Player.guilds.any(id=guild_id)).all()
+    if guild_res is None:
+        return json.dumps(({'success': 'true',
+                       'skill_point': 0}))
+    skill_point = 0
+    item_bucket = []
+    for player in guild_res:
+        player_id = str(player).lstrip('<Player ').rstrip('>')
+        res = Item.query.filter(Item.owners.any(id=player_id)).all()
+        player_res = Player.query.filter_by(id=player_id).first()
+        skill_point += int(player_res.skill_point)
+        if res is None:
+            continue
+        for item in res:
+            item_id = str(item).lstrip('<Item ').rstrip('>')
+            item_bucket.append(item_id)
+            # res = Item.query.filter_by(id=item_id).first()
+            # skill_point += int(res.skill_point)
+    unique_item = list(set(item_bucket))
+    for item_id in unique_item:
+        res = Item.query.filter_by(id=item_id).first()
+        skill_point += int(res.skill_point)
+    return json.dumps(({'success': 'true',
+                        'skill_point': skill_point}))
+        
+
 
 
 if __name__ == '__main__':
