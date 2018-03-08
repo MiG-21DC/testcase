@@ -7,7 +7,7 @@ import json
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://shawn:shawn@localhost/gamehive'
 db = flask_sqlalchemy.SQLAlchemy(app)
-api = Api(app)
+
 
 guild_stat = db.Table('guild_stat',
                       db.Column('player_id', db.String(128), db.ForeignKey('player.id')),
@@ -46,13 +46,13 @@ db.create_all()
 class WorkOnPlayer(Resource):
     def get(self, nickname):
         print('here2')
-        res = Player.query.filter_by(nickname=nickname).first()
+        res = db.session.query('Player').filter_by(nickname=nickname).first()
         print('here')
         print(res)
         if res is None:
             return 404
         return json.dumps({'id': res.id, 'nickname': res.nickname, 'email': res.email})
-
+api = Api(app)
 api.add_resource(WorkOnPlayer, '/player')
 
 # manager = flask_restless.APIManager(app, flask_sqlalchemy_db=db)
