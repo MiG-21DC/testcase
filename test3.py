@@ -1,4 +1,4 @@
-from flask import Flask
+from flask import Flask, request
 import flask_sqlalchemy
 from flask_restful import Resource, Api
 import json
@@ -76,7 +76,7 @@ def get_player(nickname):
 
 @app.route('/player', methods=['POST'])
 def add_player():
-    data = requests.json()
+    data = request.get_data()
     print(data)
     return data
 
