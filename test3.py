@@ -80,13 +80,21 @@ def get_player(nickname):
 def add_player():
     data = request.get_data(as_text=True)
     data = ast.literal_eval(data)
-    print(data)
-    print(data['id'])
     newplayer = Player(id=data['id'], nickname=data['nickname'], email=data['email'])
     db.session.add(newplayer)
     db.session.commit()
     return json.dumps({'success': 'true'})
 
+
+@app.route('/player/<nickname>', methods=['DELETE'])
+def delete_player(nickname):
+    res = Player.query.filter_by(nickname=nickname).first()
+    if res is None:
+        return 404
+    player = {'id': res.id, 'nickname': res.nickname, 'email': res.email}
+    db.session.delete(player)
+    db.session.commit()
+    return json.dumps({'success': 'true'})
 
 if __name__ == '__main__':
     app.run(debug=True, host='0.0.0.0')
