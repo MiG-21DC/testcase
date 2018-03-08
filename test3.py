@@ -76,7 +76,7 @@ def get_player(nickname):
 
 @app.route('/player', methods=['POST'])
 def add_player():
-    data = requests.get_json()
+    data = requests.json()
     print(data)
     return data
 
